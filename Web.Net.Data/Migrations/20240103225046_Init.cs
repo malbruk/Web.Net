@@ -44,8 +44,7 @@ namespace Web.Net.Data.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PlanId = table.Column<int>(type: "int", nullable: false),
-                    TeamId = table.Column<int>(type: "int", nullable: false)
+                    PlanId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -56,10 +55,28 @@ namespace Web.Net.Data.Migrations
                         principalTable: "Plans",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TeamUser",
+                columns: table => new
+                {
+                    TeamsId = table.Column<int>(type: "int", nullable: false),
+                    UsersId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TeamUser", x => new { x.TeamsId, x.UsersId });
                     table.ForeignKey(
-                        name: "FK_Users_Teams_TeamId",
-                        column: x => x.TeamId,
+                        name: "FK_TeamUser_Teams_TeamsId",
+                        column: x => x.TeamsId,
                         principalTable: "Teams",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TeamUser_Users_UsersId",
+                        column: x => x.UsersId,
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -86,14 +103,14 @@ namespace Web.Net.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_TeamUser_UsersId",
+                table: "TeamUser",
+                column: "UsersId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Users_PlanId",
                 table: "Users",
                 column: "PlanId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_TeamId",
-                table: "Users",
-                column: "TeamId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserSettings_UserId",
@@ -105,16 +122,19 @@ namespace Web.Net.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "TeamUser");
+
+            migrationBuilder.DropTable(
                 name: "UserSettings");
+
+            migrationBuilder.DropTable(
+                name: "Teams");
 
             migrationBuilder.DropTable(
                 name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Plans");
-
-            migrationBuilder.DropTable(
-                name: "Teams");
         }
     }
 }

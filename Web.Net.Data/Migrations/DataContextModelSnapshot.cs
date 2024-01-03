@@ -21,6 +21,21 @@ namespace Web.Net.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("TeamUser", b =>
+                {
+                    b.Property<int>("TeamsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UsersId")
+                        .HasColumnType("int");
+
+                    b.HasKey("TeamsId", "UsersId");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("TeamUser");
+                });
+
             modelBuilder.Entity("Web.Net.Core.Models.Plan", b =>
                 {
                     b.Property<int>("Id")
@@ -81,14 +96,9 @@ namespace Web.Net.Data.Migrations
                     b.Property<int>("PlanId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TeamId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("PlanId");
-
-                    b.HasIndex("TeamId");
 
                     b.ToTable("Users");
                 });
@@ -120,6 +130,21 @@ namespace Web.Net.Data.Migrations
                     b.ToTable("UserSettings");
                 });
 
+            modelBuilder.Entity("TeamUser", b =>
+                {
+                    b.HasOne("Web.Net.Core.Models.Team", null)
+                        .WithMany()
+                        .HasForeignKey("TeamsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Web.Net.Core.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Web.Net.Core.Models.User", b =>
                 {
                     b.HasOne("Web.Net.Core.Models.Plan", "Plan")
@@ -128,15 +153,7 @@ namespace Web.Net.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Web.Net.Core.Models.Team", "Team")
-                        .WithMany("Users")
-                        .HasForeignKey("TeamId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Plan");
-
-                    b.Navigation("Team");
                 });
 
             modelBuilder.Entity("Web.Net.Core.Models.UserSetting", b =>
@@ -151,11 +168,6 @@ namespace Web.Net.Data.Migrations
                 });
 
             modelBuilder.Entity("Web.Net.Core.Models.Plan", b =>
-                {
-                    b.Navigation("Users");
-                });
-
-            modelBuilder.Entity("Web.Net.Core.Models.Team", b =>
                 {
                     b.Navigation("Users");
                 });

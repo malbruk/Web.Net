@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -33,7 +34,7 @@ namespace Web.Net.Data.Repositories
 
         public IEnumerable<User> GetAll()
         {
-            return _context.Users;
+            return _context.Users.Include(u => u.Plan);
         }
 
         public User GetById(int id)

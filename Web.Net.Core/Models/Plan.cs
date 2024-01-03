@@ -15,6 +15,6 @@ namespace Web.Net.Core.Models
         public double Price { get; set; }
 
 
-        public List<User>Users { get; set; }
+        public List<User> Users { get; set; }
     }
 }
