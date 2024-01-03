@@ -23,9 +23,8 @@ namespace Web.Net.Core.Models
         public Plan Plan { get; set; }
 
         //Many-To-Many
-        public int TeamId {get;set;}
 
-        public Team Team { get; set; }
+        public List<Team> Teams { get; set; }
 
         //One-To-One
         public UserSetting UserSetting { get; set; }

@@ -19,7 +19,7 @@ namespace Web.Net.Data.Repositories
 
         public User Add(User user)
         {
-            _context.Add(user);
+            _context.Users.Add(user);
             _context.SaveChanges();
             return user;
         }
@@ -27,7 +27,7 @@ namespace Web.Net.Data.Repositories
         public void Delete(int id)
         {
             var user = GetById(id);
-            _context.Remove(user);
+            _context.Users.Remove(user);
             _context.SaveChanges();
         }
 
