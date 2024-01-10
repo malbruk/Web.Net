@@ -11,7 +11,7 @@ namespace Web.Net.Data
 
         public DbSet<Plan> Plans { get; set; }
 
-        public DbSet<Team>Teams { get; set; }
+        public DbSet<Team> Teams { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

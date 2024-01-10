@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Web.Net.Core;
 using Web.Net.Core.Repositories;
 using Web.Net.Core.Services;
 using Web.Net.Data;
@@ -23,6 +24,10 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 builder.Services.AddDbContext<DataContext>();
+
+builder.Services.AddAutoMapper(typeof(MappingProfile));
+builder.Services.AddSingleton<Mapping>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using Web.Net.API.Models;
+using Web.Net.Core;
+using Web.Net.Core.DTOs;
 using Web.Net.Core.Models;
 using Web.Net.Core.Services;
 using Web.Net.Service;
@@ -13,16 +17,22 @@ namespace Web.Net.API.Controllers
     {
         private readonly IUserService _userService;
 
-        public UsersController(IUserService userService)
+        private readonly Mapping _mapping;
+
+        private readonly IMapper _mapper;
+        public UsersController(IUserService userService, Mapping mapping, IMapper mapper)
         {
             _userService = userService;
+            _mapping = mapping;
+            _mapper = mapper;
         }
 
         // GET: api/<UsersController>
         [HttpGet]
         public ActionResult Get()
         {
-            return Ok(_userService.GetAll());
+            var list = _userService.GetAll();
+            return Ok(_mapper.Map<List<UserDto>>(list));
         }
 
         // GET api/<UsersController>/5
@@ -34,9 +44,11 @@ namespace Web.Net.API.Controllers
 
         // POST api/<UsersController>
         [HttpPost]
-        public ActionResult Post([FromBody] User user)
+        public ActionResult Post([FromBody] UserPostModel user)
         {
-            return Ok(_userService.Add(user));
+            var userToAdd = new User { Name = user.Name, Password = user.Password, Email = user.Email, PlanId = user.PlanId };
+            var newUser = _userService.Add(userToAdd);
+            return Ok(_mapping.ConvertToUserDto(newUser));
         }
 
         // PUT api/<UsersController>/5
@@ -51,7 +63,7 @@ namespace Web.Net.API.Controllers
         public ActionResult Delete(int id)
         {
             var user = _userService.GetById(id);
-            if(user is null)
+            if (user is null)
             {
                 return NotFound();
             }
