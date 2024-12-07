@@ -51,11 +51,11 @@ namespace Web.Net.API.Controllers
         public ActionResult Delete(int id)
         {
             var user = _userService.GetById(id);
-            if(user is null)
+            if (user is null)
             {
                 return NotFound();
             }
-            _userService.Delete(id);
+            _userService.Delete(user);
             return NoContent();
         }
     }

@@ -6,9 +6,9 @@ namespace Web.Net.Service
 {
     public class UserService : IUserService
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IRepository<User> _userRepository;
 
-        public UserService(IUserRepository userRepository)
+        public UserService(IRepository<User> userRepository)
         {
             _userRepository = userRepository;
         }
@@ -18,9 +18,9 @@ namespace Web.Net.Service
             return _userRepository.Add(user);
         }
 
-        public void Delete(int id)
+        public void Delete(User user)
         {
-            _userRepository.Delete(id);
+            _userRepository.Delete(user);
         }
 
         public IEnumerable<User> GetAll()
@@ -28,14 +28,22 @@ namespace Web.Net.Service
             return _userRepository.GetAll();
         }
 
-        public User GetById(int id)
+        public User? GetById(int id)
         {
             return _userRepository.GetById(id);
         }
 
-        public User Update(int id, User user)
+        public User? Update(int id, User user)
         {
-            return _userRepository.Update(id, user);
+            var dbUser = GetById(id);
+            if (dbUser == null)
+            {
+                return null;
+            }
+            dbUser.Name = user.Name;
+            dbUser.Email = user.Email;
+
+            return _userRepository.Update(dbUser);
         }
     }
 }
