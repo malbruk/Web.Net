@@ -4,33 +4,31 @@ using Web.Net.Core.Services;
 
 namespace Web.Net.Service
 {
-    public class UserService : IUserService
+    public class UserService(IRepositoryManager repositoryManager) : IUserService
     {
-        private readonly IRepository<User> _userRepository;
-
-        public UserService(IRepository<User> userRepository)
-        {
-            _userRepository = userRepository;
-        }
+        private readonly IRepositoryManager _repositoryManager = repositoryManager;
 
         public User Add(User user)
         {
-            return _userRepository.Add(user);
+            _repositoryManager.Users.Add(user);
+            _repositoryManager.Save();
+            return user;
         }
 
         public void Delete(User user)
         {
-            _userRepository.Delete(user);
+            _repositoryManager.Users.Delete(user);
+            _repositoryManager.Save();
         }
 
         public IEnumerable<User> GetAll()
         {
-            return _userRepository.GetAll();
+            return _repositoryManager.Users.GetAll();
         }
 
         public User? GetById(int id)
         {
-            return _userRepository.GetById(id);
+            return _repositoryManager.Users.GetById(id);
         }
 
         public User? Update(int id, User user)
@@ -43,7 +41,9 @@ namespace Web.Net.Service
             dbUser.Name = user.Name;
             dbUser.Email = user.Email;
 
-            return _userRepository.Update(dbUser);
+            _repositoryManager.Users.Update(dbUser);
+            _repositoryManager.Save();
+            return dbUser;
         }
     }
 }
