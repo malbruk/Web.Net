@@ -7,16 +7,16 @@ using Web.Net.Core.Models;
 
 namespace Web.Net.Core.Repositories
 {
-    public interface IUserRepository
+    public interface IRepository<T> where T : class
     {
-        IEnumerable<User> GetAll();
+        IEnumerable<T> GetAll();
 
-        User GetById(int id);
+        T? GetById(int id);
 
-        User Add(User user);
+        T Add(T entity);
 
-        User Update(int id, User user);
+        T Update(T entity);
 
-        void Delete(int id);
+        void Delete(T entity);
     }
 }
